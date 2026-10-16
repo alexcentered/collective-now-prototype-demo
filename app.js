@@ -6,7 +6,7 @@
   const singular = {artist:'Artist',community:'Community',event:'Public event',map:'Map & directory',media:'Media',organization:'Organization',resource:'Resource bank'};
   const kinds = ['artist','community','event','map','media','organization','resource'];
   const $ = id => document.getElementById(id);
-  const state = {entries:[],search:'',kind:'',country:'',state:'',region:'',sort:'image',view:'cards',page:1,mapZoom:4,mapCenter:[39,-96]};
+  const state = {entries:[],artwork:{},search:'',kind:'',country:'',state:'',region:'',sort:'image',view:'cards',page:1,mapZoom:4,mapCenter:[39,-96]};
   const pageSize = 24;
   let activeMap = null;
 
@@ -38,18 +38,29 @@
     const items = state.entries.filter(matches);
     if (state.sort === 'az') items.sort((a,b) => a.name.localeCompare(b.name));
     else if (state.sort === 'za') items.sort((a,b) => b.name.localeCompare(a.name));
-    else items.sort((a,b) => Number(Boolean(b.imageUrl)) - Number(Boolean(a.imageUrl)) || a.name.localeCompare(b.name));
+    else items.sort((a,b) => {
+      const ar = Object.keys(state.artwork).indexOf(a.slug), br = Object.keys(state.artwork).indexOf(b.slug);
+      if (ar >= 0 && br >= 0) return ar-br;
+      if (ar >= 0) return -1;
+      if (br >= 0) return 1;
+      return Number(Boolean(b.imageUrl)) - Number(Boolean(a.imageUrl)) || a.name.localeCompare(b.name);
+    });
     return items;
   }
   function art(entry) {
-    const box = el('div', `card-art ${entry.imageKind === 'logo' ? 'logo' : ''}`, entry.name.split(/\s+/).slice(0,2).map(x => x[0]).join('').toUpperCase());
-    if (entry.imageUrl) {
+    const box = el('div', `card-art ${entry.imageKind === 'logo' ? 'logo' : ''}`);
+    const fallback = el('span','art-fallback',entry.name.split(/\s+/).slice(0,2).map(x => x[0]).join('').toUpperCase());
+    box.append(fallback);
+    const imageUrl=state.artwork[entry.slug] || entry.imageUrl;
+    if (imageUrl) {
       const img = el('img');
-      img.src = entry.imageUrl;
+      img.src = imageUrl;
       img.alt = `${entry.name} image`;
       img.loading = 'lazy';
       img.referrerPolicy = 'no-referrer';
-      img.addEventListener('load', () => { box.textContent = ''; box.append(img); });
+      img.addEventListener('load', () => { fallback.hidden = true; });
+      img.addEventListener('error', () => { img.remove(); });
+      box.append(img);
     }
     return box;
   }
@@ -57,7 +68,7 @@
     const node = el('article','card');
     node.append(art(entry));
     const body = el('div','card-body');
-    body.append(el('span','kind',singular[entry.kind] || entry.kind));
+    body.append(el('span','kind',labels[entry.kind] || entry.kind));
     const h = el('h3'); h.append(link(entry.name, `#/directory/${encodeURIComponent(entry.slug)}`)); body.append(h);
     if (entry.summary) body.append(el('p','summary',entry.summary));
     const loc = placeLabel(entry); if (loc) body.append(el('p','meta',loc));
@@ -188,20 +199,25 @@
     $('hero').hidden=true;$('directory').hidden=true;$('detail').hidden=false;
     $('detail').replaceChildren();
     if (!entry) {$('detail').append(link('← Back to directory','#/directory','back-link'),el('h1','', 'Entry not found'));return;}
-    $('detail').append(link('← Back to directory','#/directory','back-link'),el('p','eyebrow',singular[entry.kind]||entry.kind),el('h1','',entry.name));
+    $('detail').append(link('← Directory','#/directory','back-link'));
+    const heading=el('div','detail-heading');
+    const headingText=el('div');headingText.append(el('p','eyebrow',singular[entry.kind]||entry.kind),el('h1','',entry.name));heading.append(headingText);
+    const imageUrl=state.artwork[entry.slug] || entry.imageUrl;
+    if (imageUrl) {const image=el('img','detail-art');image.src=imageUrl;image.alt=`${entry.name} image`;image.loading='lazy';image.referrerPolicy='no-referrer';image.addEventListener('error',()=>image.remove());heading.append(image);}
+    $('detail').append(heading);
     if (entry.summary) $('detail').append(el('p','summary',entry.summary));
-    if (entry.imageUrl) {const image=el('img','detail-art');image.src=entry.imageUrl;image.alt=`${entry.name} image`;image.loading='lazy';image.referrerPolicy='no-referrer';image.addEventListener('error',()=>image.remove());$('detail').append(image);}
-    if (entry.topics.length) {const chips=el('div','chips');chips.append(...entry.topics.map(t=>el('span','chip',t)));$('detail').append(chips);}
+    if (entry.websiteUrl) {const site=link('Visit website ↗',entry.websiteUrl,'website');site.target='_blank';site.rel='noopener noreferrer';$('detail').append(site);}
     const fields=[['Location',placeLabel(entry)],['Neighborhood',entry.neighborhood],['Collection',labels[entry.kind]]].filter(x=>x[1]);
     if (fields.length) {const dl=el('dl','detail-meta');for(const [label,value] of fields){const div=el('div');div.append(el('dt','',label),el('dd','',value));dl.append(div);}$('detail').append(dl);}
-    if (entry.websiteUrl) {const site=link('Visit website ↗',entry.websiteUrl,'website');site.target='_blank';site.rel='noopener noreferrer';$('detail').append(site);}
+    if (entry.topics.length) {const chips=el('div','chips');chips.append(...entry.topics.map(t=>el('span','chip',t)));$('detail').append(chips);}
     document.title=`${entry.name} — Collective Now`;
     window.scrollTo({top:0,behavior:'instant'});
   }
   function route() {
     const match=window.location.hash.match(/^#\/directory\/([^/?#]+)/);
-    if (match) {renderDetail(decodeURIComponent(match[1]));return;}
+    if (match) {document.querySelector('.nav-link').textContent='Back to directory';renderDetail(decodeURIComponent(match[1]));return;}
     $('hero').hidden=false;$('directory').hidden=false;$('detail').hidden=true;
+    document.querySelector('.nav-link').textContent='Directory';
     document.title='Collective Now — Network Directory';
     if (window.location.hash==='#/directory') $('directory').scrollIntoView({behavior:'smooth'});
   }
@@ -222,9 +238,10 @@
     setup();
     $('result-count').textContent='Loading…';
     try {
-      const response=await fetch('./entries.json',{cache:'no-store'});
+      const [response, artworkResponse]=await Promise.all([fetch('./entries.json',{cache:'no-store'}),fetch('./assets/manifest.json',{cache:'no-store'})]);
       if(!response.ok)throw Error(`Data request failed (${response.status})`);
       state.entries=await response.json();
+      if(artworkResponse.ok)state.artwork=await artworkResponse.json();
       populateSelect('kind',state.entries.map(e=>e.kind),'collections');
       for(const option of $('kind').options)if(option.value)option.textContent=labels[option.value]||option.value;
       populateSelect('country',state.entries.map(e=>e.country),'countries');
