@@ -252,6 +252,14 @@
     }
     $('search').addEventListener('input',event=>{state.search=event.target.value;state.page=1;renderResults();});
     $('hero-search').addEventListener('submit',event=>{event.preventDefault();locationToDirectory();});
+    document.querySelector('.election-shortcut').addEventListener('click',()=>{
+      for(const id of ['search','kind','country','state','region','lens','domain','source'])state[id]='';
+      for(const id of ['search','kind','country','state','region','domain','source'])$(id).value='';
+      state.focus='election';$('focus').value='election';state.view='cards';state.page=1;
+      document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.view==='cards')));
+      render();
+    });
+
     $('clear').addEventListener('click',()=>{for(const id of ['search','kind','country','state','region','lens','domain','focus','source'])state[id]='';state.page=1;$('search').value='';if(location.hash.includes('?'))history.replaceState(null,'','#/directory');for(const id of ['kind','country','state','region','domain','focus','source'])$(id).value='';render();});
     document.querySelectorAll('[data-view]').forEach(button=>button.addEventListener('click',()=>{state.view=button.dataset.view;state.page=1;document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));renderResults();}));
     window.addEventListener('hashchange',route);
