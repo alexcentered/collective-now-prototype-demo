@@ -17,8 +17,16 @@
     if (text !== undefined) node.textContent = text;
     return node;
   }
+  function arrowIcon() {
+    const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
+    for(const [name,value] of Object.entries({class:'direction-icon',width:'16',height:'16',viewBox:'0 0 16 16',fill:'none',stroke:'currentColor','stroke-width':'1.6','stroke-linecap':'round','stroke-linejoin':'round','aria-hidden':'true',focusable:'false'}))svg.setAttribute(name,value);
+    const path=document.createElementNS('http://www.w3.org/2000/svg','path');
+    path.setAttribute('d','M4 12 12 4M4 4h8v8');svg.append(path);return svg;
+  }
   function link(text, href, cls) {
-    const node = el('a', cls, text);
+    const showArrow=text.endsWith('↗');
+    const node = el('a', cls, showArrow?text.slice(0,-1).trimEnd():text);
+    if(showArrow)node.append(document.createTextNode(' '),arrowIcon());
     node.href = href;
     return node;
   }

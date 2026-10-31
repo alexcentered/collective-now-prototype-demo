@@ -10,8 +10,8 @@
   <link rel="stylesheet" href="../styles.css">
   <link rel="stylesheet" href="../match.css?v=mobile-20261016">
   <script defer src="../vendor/leaflet/leaflet.js"></script>
-  <script defer src="./app.js?v=focus-open-20261031"></script>
-  <link rel="stylesheet" href="./review.css?v=focus-open-20261031">
+  <script defer src="./app.js?v=responsive-arrows-20261031"></script>
+  <link rel="stylesheet" href="./review.css?v=responsive-arrows-20261031">
 </head>
 <body>
   <div class="shell">
@@ -20,13 +20,13 @@
       <a class="nav-link" href="#/directory">Directory</a>
     </header>
 
-    <div class="review-strip"><span>ATLAS REVIEW · OCT 31, 2026</span><a href="../">Original directory ↗</a></div>
+    <div class="review-strip"><span>ATLAS REVIEW · OCT 31, 2026</span><a href="../">Original directory <svg class="direction-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg></a></div>
     <main id="main">
       <section class="hero" id="hero">
         <p class="eyebrow">A LIVING DIRECTORY FOR COLLECTIVE ACTION</p>
         <h1>Find the people and projects building what comes next.</h1>
         <p class="hero-lead">Explore organizations, resources, events, and networks working across movements, methods, and places.</p>
-        <a class="election-shortcut" href="#/directory?focus=election"><span>IN FOCUS</span> Election readiness &amp; community resilience <b aria-hidden="true">↗</b></a>
+        <a class="election-shortcut" href="#/directory?focus=election"><span>IN FOCUS</span> Election readiness &amp; community resilience <b aria-hidden="true"><svg class="direction-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg></b></a>
         <section id="focus-section" class="focus-section" aria-labelledby="focus-title" hidden>
           <div class="focus-heading"><h2 id="focus-title">In focus</h2><p id="focus-count" aria-live="polite"></p></div>
           <div id="focus-results" class="focus-results"></div>
@@ -35,9 +35,9 @@
         <p class="mapping-note">Five broad lenses are a proposed front door. AI-suggested entry categories are provisional and may overlap.</p>
         <form id="hero-search" class="hero-search" action="#/directory">
           <label for="search">SEARCH THE DIRECTORY</label>
-          <div class="hero-search-row"><input id="search" type="search" placeholder="Names, places, movements, or methods" autocomplete="off"><button type="submit">Explore <span aria-hidden="true">↗</span></button></div>
+          <div class="hero-search-row"><input id="search" type="search" placeholder="Names, places, movements, or methods" autocomplete="off"><button type="submit">Explore <span aria-hidden="true"><svg class="direction-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg></span></button></div>
         </form>
-        <p class="merge-note">Browse the combined public directory. Entries can belong to more than one source; source filters preserve those overlaps. <a href="./directory-review.csv" download>Download the review CSV ↗</a></p>
+        <p class="merge-note">Browse the combined public directory. Entries can belong to more than one source; source filters preserve those overlaps. <a href="./directory-review.csv" download>Download the review CSV <svg class="direction-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg></a></p>
         <details class="about-taxonomy"><summary>How the categories work</summary><p>Use a broad lens, search directly, or open a detailed domain. The 13 detailed domains remain available; no sequence of clicks is required. Individual category assignments are AI suggestions for review, not approved classifications.</p><p>Original tags remain visible on each entry. Domain, transformation, framework, practice, and place are different dimensions; this preview adds domain and broad-lens suggestions only.</p></details>
       </section>
 
@@ -65,7 +65,7 @@
         </div>
       </section>
 
-      <section class="upcoming" id="upcoming"><p class="eyebrow">UPCOMING EVENTS</p><h2>Find a gathering. Check the details.</h2><p>No dated events have been verified for publication in this review. This is a curated snapshot; automatic event collection is not connected.</p><a href="https://indivisible.org/get-involved/attend-an-event/" target="_blank" rel="noopener noreferrer">Browse an organizer’s public event directory ↗</a><p class="fineprint">External organizer directory; confirm times, locations, accessibility, and registration with the organizer. When dated listings are added, this preview hides events after their recorded end time.</p></section>
+      <section class="upcoming" id="upcoming"><p class="eyebrow">UPCOMING EVENTS</p><h2>Find a gathering. Check the details.</h2><p>No dated events have been verified for publication in this review. This is a curated snapshot; automatic event collection is not connected.</p><a href="https://indivisible.org/get-involved/attend-an-event/" target="_blank" rel="noopener noreferrer">Browse an organizer’s public event directory <svg class="direction-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg></a><p class="fineprint">External organizer directory; confirm times, locations, accessibility, and registration with the organizer. When dated listings are added, this preview hides events after their recorded end time.</p></section>
       <section id="detail" class="detail" hidden aria-live="polite"></section>
     </main>
     <footer><span>Network-Weaving Directory</span><span>Review prototype · Public resources only · Categories need review</span></footer>
