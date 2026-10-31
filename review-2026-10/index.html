@@ -10,8 +10,8 @@
   <link rel="stylesheet" href="../styles.css">
   <link rel="stylesheet" href="../match.css?v=mobile-20261016">
   <script defer src="../vendor/leaflet/leaflet.js"></script>
-  <script defer src="./app.js?v=illustrated-focus-20261031"></script>
-  <link rel="stylesheet" href="./review.css?v=illustrated-focus-20261031">
+  <script defer src="./app.js?v=label-cleanup-20261031"></script>
+  <link rel="stylesheet" href="./review.css?v=label-cleanup-20261031">
 </head>
 <body>
   <div class="shell">
@@ -32,13 +32,13 @@
           <div id="focus-results" class="focus-results"></div>
         </section>
         <div id="lenses" class="lenses" aria-label="Broad lenses"></div>
-        <p class="mapping-note">Five broad lenses are a proposed front door. AI-suggested entry categories are provisional and may overlap.</p>
+        <p class="mapping-note">Five broad lenses are a proposed front door. Entry categories are provisional and may overlap.</p>
         <form id="hero-search" class="hero-search" action="#/directory">
           <label for="search">SEARCH THE DIRECTORY</label>
           <div class="hero-search-row"><input id="search" type="search" placeholder="Names, places, movements, or methods" autocomplete="off"><button type="submit">Explore <span aria-hidden="true"><svg class="direction-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg></span></button></div>
         </form>
         <p class="merge-note">Browse the combined public directory. Entries can belong to more than one source; source filters preserve those overlaps. <a href="./directory-review.csv" download>Download the review CSV <svg class="direction-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg></a></p>
-        <details class="about-taxonomy"><summary>How the categories work</summary><p>Use a broad lens, search directly, or open a detailed domain. The 13 detailed domains remain available; no sequence of clicks is required. Individual category assignments are AI suggestions for review, not approved classifications.</p><p>Original tags remain visible on each entry. Domain, transformation, framework, practice, and place are different dimensions; this preview adds domain and broad-lens suggestions only.</p></details>
+        <details class="about-taxonomy"><summary>How the categories work</summary><p>Use a broad lens, search directly, or open a detailed domain. The 13 detailed domains remain available; no sequence of clicks is required. Individual category assignments are provisional and need review; they are not approved classifications.</p><p>Original tags remain visible on each entry. Domain, transformation, framework, practice, and place are different dimensions; this preview adds domain and broad-lens suggestions only.</p></details>
       </section>
 
       <section class="directory" id="directory" aria-labelledby="directory-title">
@@ -51,7 +51,7 @@
         </div>
         <div class="directory-layout">
           <aside class="filters" aria-label="Directory filters">
-            <label>DETAILED DOMAIN · AI SUGGESTION<select id="domain"><option value="">All 13 domains</option></select></label>
+            <label>DETAILED DOMAIN<select id="domain"><option value="">All 13 domains</option></select></label>
             <label>DATA SOURCE<select id="source"><option value="">All sources</option><option value="master-spreadsheet">Master organization list</option><option value="airtable-directory">Airtable Social Justice Directory</option><option value="existing-directory">Existing public directory</option><option value="election-curation">Reviewed election resources</option></select></label>
             <label>FOCUS<select id="focus"><option value="">All public entries</option><option value="election">Election &amp; democracy resources</option></select></label>
             <label>COLLECTION <select id="kind"><option value="">All collections</option></select></label>

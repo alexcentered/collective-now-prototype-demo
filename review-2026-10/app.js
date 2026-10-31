@@ -114,10 +114,9 @@
     if (entry.summaryAttribution) body.append(el('p','attribution',entry.summaryAttribution));
     if (entry.election) body.append(el('span','resource-badge','Election readiness · Public resource'));
     if (entry.publisher) body.append(el('p','publisher',entry.publisher));
-    if (entry.domains?.length) body.append(el('p','ai-label','AI-suggested · '+entry.domains.join(' · ')));
-    else body.append(el('p','ai-label',entry.categoryStatus.includes('Needs review')?'AI suggestion · Needs review':'Category suggestions not available'));
+    if (entry.domains?.length) body.append(el('p','ai-label',entry.domains.join(' · ')));
+    else body.append(el('p','ai-label',entry.categoryStatus.includes('Needs review')?'Needs review':'Categories not assigned'));
     if (entry.summary) body.append(el('p','summary',entry.summary));
-    if (entry.verified) body.append(el('p','meta','Atlas-written summary · Link checked '+entry.verified));
     const loc = placeLabel(entry); if (loc) body.append(el('p','meta',loc));
     if (expanded && entry.note) body.append(el('p','focus-note',entry.note));
     if (expanded && entry.websiteUrl) {
@@ -269,9 +268,8 @@
     $('detail').append(el('p','source-badges','Sources: '+(entry.sources||[]).map(s=>sourceLabels[s]).join(' · ')));
     if(entry.summaryAttribution)$('detail').append(el('p','attribution',entry.summaryAttribution));
     if(entry.publisher) $('detail').append(el('p','publisher',entry.publisher));
-    if(entry.domains?.length) $('detail').append(el('p','ai-label','AI-suggested categories · '+entry.domains.join(' · ')+' / '+(entry.lenses||[]).join(' · ')));
-    else $('detail').append(el('p','ai-label',entry.categoryStatus.includes('Needs review')?'AI suggestion · Needs review':'Category suggestions not available'));
-    if(entry.verified) $('detail').append(el('p','meta','Atlas-written summary · Public link checked '+entry.verified));
+    if(entry.domains?.length) $('detail').append(el('p','ai-label','Categories · '+entry.domains.join(' · ')+' / '+(entry.lenses||[]).join(' · ')));
+    else $('detail').append(el('p','ai-label',entry.categoryStatus.includes('Needs review')?'Needs review':'Categories not assigned'));
     if(entry.note) $('detail').append(el('p','resource-note',entry.note));
     if (entry.summary) $('detail').append(el('p','summary',entry.summary));
     if (entry.websiteUrl) {const site=link('Visit website ↗',entry.websiteUrl,'website');site.target='_blank';site.rel='noopener noreferrer';$('detail').append(site);}
