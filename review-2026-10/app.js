@@ -71,9 +71,9 @@
     }
     return box;
   }
-  function card(entry) {
-    const node = el('article','card');
-    node.append(art(entry));
+  function card(entry, expanded = false) {
+    const node = el('article',expanded?'card focus-card':'card');
+    if (!expanded) node.append(art(entry));
     const body = el('div','card-body');
     body.append(el('span','kind',labels[entry.kind] || entry.kind));
     const h = el('h3'); h.append(link(entry.name, `#/directory/${encodeURIComponent(entry.slug)}`)); body.append(h);
@@ -86,6 +86,11 @@
     if (entry.summary) body.append(el('p','summary',entry.summary));
     if (entry.verified) body.append(el('p','meta','Atlas-written summary · Link checked '+entry.verified));
     const loc = placeLabel(entry); if (loc) body.append(el('p','meta',loc));
+    if (expanded && entry.note) body.append(el('p','focus-note',entry.note));
+    if (expanded && entry.websiteUrl) {
+      const resource=link('Open resource ↗',entry.websiteUrl,'focus-resource');resource.target='_blank';resource.rel='noopener noreferrer';
+      resource.setAttribute('aria-label','Open resource: '+entry.name);body.append(resource);
+    }
     body.append(link('View entry ↗', `#/directory/${encodeURIComponent(entry.slug)}`, 'view-entry'));
     node.append(body);
     return node;
@@ -183,14 +188,24 @@
     return wrap;
   }
   function renderResults() {
-    const items=selectedEntries();
+    const matches=selectedEntries();
+    const focused=matches.filter(entry=>entry.election===true);
+    const items=matches.filter(entry=>entry.election!==true);
+    $('focus-results').replaceChildren(...focused.map(entry=>card(entry,true)));
+    $('focus-section').hidden=!focused.length;
+    $('focus-count').textContent=`${focused.length} matching ${focused.length===1?'resource':'resources'} · shown once here` ;
+    document.querySelector('.election-shortcut').hidden=!state.entries.some(entry=>entry.election===true);
     $('active-context').textContent=[sourceLabels[state.source],state.lens, state.domain==='__review__'?'Unassigned / needs review':state.domain, state.focus==='election'?'Election & democracy resources':''].filter(Boolean).join(' / ');
-    $('result-count').textContent=`${items.length} ${items.length===1?'entry':'entries'}`;
+    $('result-count').textContent=`${matches.length} ${matches.length===1?'entry':'entries'}`;
     $('clear').hidden=!(state.source||state.search||state.kind||state.country||state.state||state.region||state.lens||state.domain||state.focus);
     if(activeMap){activeMap.remove();activeMap=null;}
     $('results').className=`results ${state.view}`;
     $('results').replaceChildren();
     $('pagination').replaceChildren();
+    if (!items.length && focused.length) {
+      const note=el('p','focus-only','All matching entries are open in In focus above. ');
+      note.append(link('Back to In focus ↑','#focus-section'));$('results').append(note);return;
+    }
     if (!items.length) {
       const empty=el('div','empty');empty.append(el('h3','', 'No entries match'),el('p','', 'Try a broader search or clear the current filters.'));
       $('results').append(empty);return;
@@ -198,7 +213,7 @@
     if (state.view==='map') {$('results').append(renderMap(items));return;}
     const pages=Math.ceil(items.length/pageSize);
     state.page=Math.min(Math.max(1,state.page),pages);
-    $('results').append(...items.slice((state.page-1)*pageSize,state.page*pageSize).map(card));
+    $('results').append(...items.slice((state.page-1)*pageSize,state.page*pageSize).map(entry=>card(entry)));
     if (pages>1) {
       const prev=el('button','', 'Previous');prev.disabled=state.page===1;
       const next=el('button','', 'Next');next.disabled=state.page===pages;
@@ -241,7 +256,7 @@
     $('upcoming').hidden=false;$('hero').hidden=false;$('directory').hidden=false;$('detail').hidden=true;
     document.querySelector('.nav-link').textContent='Directory';
     document.title='Collective Now — Atlas review';
-    if (window.location.hash.startsWith('#/directory')) $('directory').scrollIntoView({behavior:'smooth'});
+    if (window.location.hash.startsWith('#/directory')) (state.focus==='election'&&!$('focus-section').hidden?$('focus-section'):$('directory')).scrollIntoView({behavior:'smooth'});
   }
   function render() {
     renderCollections();renderResults();route();

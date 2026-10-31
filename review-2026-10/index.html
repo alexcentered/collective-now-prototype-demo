@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="../styles.css">
   <link rel="stylesheet" href="../match.css?v=mobile-20261016">
   <script defer src="../vendor/leaflet/leaflet.js"></script>
-  <script defer src="./app.js?v=review-final-20261031"></script>
+  <script defer src="./app.js?v=focus-open-20261031"></script>
   <link rel="stylesheet" href="./review.css">
 </head>
 <body>
@@ -27,6 +27,10 @@
         <h1>Many ways in.<br>More ways forward.</h1>
         <p class="hero-lead">Explore the people, practices, and resources building what comes next. Start anywhere; these categories overlap.</p>
         <a class="election-shortcut" href="#/directory?focus=election"><span>IN FOCUS</span> Election readiness &amp; community resilience <b aria-hidden="true">↗</b></a>
+        <section id="focus-section" class="focus-section" aria-labelledby="focus-title" hidden>
+          <div class="focus-heading"><h2 id="focus-title">In focus</h2><p id="focus-count" aria-live="polite"></p></div>
+          <div id="focus-results" class="focus-results"></div>
+        </section>
         <div id="lenses" class="lenses" aria-label="Broad lenses"></div>
         <p class="mapping-note">Five broad lenses are a proposed front door. AI-suggested entry categories are provisional and may overlap.</p>
         <form id="hero-search" class="hero-search" action="#/directory">
