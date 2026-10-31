@@ -79,9 +79,34 @@
     }
     return box;
   }
+  const focusPreviews = {
+    'federal-interference-guide': {file:'federal-interference.webp',width:840,height:426,alt:'Navy guide header with Brennan Center and Protect Democracy logos and the title Preparing for federal interference in the 2026 midterm elections.',credit:'Document header · Brennan Center & Protect Democracy'},
+    'community-resilience': {file:'community-logos.webp',width:1250,height:400,alt:'Protect Democracy and Over Zero publisher logos, extracted from the Community Resilience guide cover.',credit:'Publisher logos · Protect Democracy & Over Zero'},
+    'election-risk-map': {file:'election-risk-map.webp',width:840,height:440,alt:'Voting Rights Lab official 2026 Election Risk Heat Map preview showing the United States.',credit:'Official preview · Voting Rights Lab',note:'Static preview image. Open the source for the interactive map and current information.'}
+  };
+  function focusPreview(entry) {
+    const preview=focusPreviews[entry.slug];
+    if(!preview)return null;
+    const figure=el('figure','focus-preview');
+    const anchor=link('',entry.websiteUrl,'focus-preview-link');
+    anchor.target='_blank';anchor.rel='noopener noreferrer';
+    anchor.setAttribute('aria-label','Open resource: '+entry.name);
+    const fallback=el('span','focus-preview-fallback','Resource preview unavailable — open the source');
+    const img=el('img');
+    img.alt=preview.alt;img.width=preview.width;img.height=preview.height;
+    img.decoding='async';img.referrerPolicy='no-referrer';
+    img.addEventListener('load',()=>{fallback.hidden=true;});
+    img.addEventListener('error',()=>{img.remove();fallback.hidden=false;});
+    img.src='./media/'+preview.file;
+    anchor.append(fallback,img);
+    const caption=el('figcaption');caption.append(link(preview.credit,entry.websiteUrl));
+    if(preview.note)caption.append(el('span','focus-preview-note',preview.note));
+    figure.append(anchor,caption);return figure;
+  }
   function card(entry, expanded = false) {
     const node = el('article',expanded?'card focus-card':'card');
     if (!expanded) node.append(art(entry));
+    else {const preview=focusPreview(entry);if(preview)node.append(preview);}
     const body = el('div','card-body');
     body.append(el('span','kind',labels[entry.kind] || entry.kind));
     const h = el('h3'); h.append(link(entry.name, `#/directory/${encodeURIComponent(entry.slug)}`)); body.append(h);
